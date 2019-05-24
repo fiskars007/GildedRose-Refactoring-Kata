@@ -1,6 +1,6 @@
 // DO NOT MODIFY UNDER PAIN OF GOBLIN INSTA-RAGE ONE-SHOT (yikes)
 class Item {
-  constructor(name, sellIn, quality){
+  constructor(name, sellIn, quality) {
     this.name = name;
     this.sellIn = sellIn;
     this.quality = quality;
@@ -14,7 +14,7 @@ class Item {
  *  2. `quality` decreases by 2 for every day thereafter.
  *  3. `sellIn` decrements by 1 every day.
  */
-const standardItemUpdater = (item) => {
+const standardItemUpdater = item => {
   if (item.sellIn > 0) {
     item.quality--;
   } else {
@@ -23,7 +23,7 @@ const standardItemUpdater = (item) => {
   if (item.quality < 0) item.quality = 0;
   item.sellIn--;
   return item;
-}
+};
 
 /**
  * Map of item types that require specific handling rules to an updater that
@@ -36,7 +36,7 @@ const standardItemUpdater = (item) => {
 const customItemUpdaters = {
   // Aged brie does not decrease in quality daily, instead it increases the same amount.
   // Max quality for brie is 50.
-  "aged brie": (item) => {
+  "aged brie": item => {
     if (item.quality < 50) {
       if (item.sellIn > 0) {
         item.quality++;
@@ -48,13 +48,13 @@ const customItemUpdaters = {
     return item;
   },
   // Sulfuras is a legendary item and is not updated.
-  "sulfuras": (item) => item,
+  sulfuras: item => item,
   // Backstage passes increase in quality daily until expiring, following these rules:
   //   sellIn > 10: quality increases by 1
   //   10 >= sellIn >= 5: increases by 2
   //   5 > sellIn => 0: increases by 3
   //   0 > sellIn: equal to 0
-  "backstage passes": (item) => {
+  "backstage passes": item => {
     item.sellIn--;
     if (item.sellIn > 10) {
       item.quality++;
@@ -69,7 +69,7 @@ const customItemUpdaters = {
     return item;
   },
   // Conjured items have their quality degrade twice as quickly as normal.
-  "conjured": (item) => {
+  conjured: item => {
     if (item.sellIn > 0) {
       item.quality -= 2;
     } else {
@@ -79,15 +79,15 @@ const customItemUpdaters = {
     item.sellIn--;
     return item;
   }
-}
+};
 
 const customItemTypes = Object.keys(customItemUpdaters);
 
 class Shop {
-  constructor(items=[]){
+  constructor(items = []) {
     this.items = items;
   }
-  
+
   updateQuality() {
     for (var i = 0; i < this.items.length; i++) {
       const nextItem = this.items[i];
@@ -107,4 +107,4 @@ class Shop {
 module.exports = {
   Item,
   Shop
-}
+};
